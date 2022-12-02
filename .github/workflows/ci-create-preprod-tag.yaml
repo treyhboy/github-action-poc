@@ -16,14 +16,20 @@ jobs:
           myToken: ${{ github.token }}
           exclude_types: "release"
           view_top: 1
-        run:
-         echo "prerelease: ${{ steps.last_release.outputs.prerelease }}"
-         echo "token: ${{ github.token }}"
+         
         # uses: pozetroninc/github-action-get-latest-release@master
         # with:
         #   repo: '$${{ github.repository }}'
         #   excludes: release, draft
-    
+      - name: "Print result"
+        run: |
+          echo "token: ${{ github.token }}"
+          echo "id: ${{ steps.last_release.outputs.id }}"
+          echo "name: ${{ steps.last_release.outputs.name }}"
+          echo "tag_name: ${{ steps.last_release.outputs.tag_name }}"
+          echo "created_at: ${{ steps.last_release.outputs.created_atd }}"
+          echo "draft: ${{ steps.last_release.outputs.draft }}"
+          echo "prerelease: ${{ steps.last_release.outputs.prerelease }}"
 
       - name: Bump release version
         id: bump_version
