@@ -21,22 +21,36 @@ jobs:
         # with:
         #   repo: '$${{ github.repository }}'
         #   excludes: release, draft
-      - name: "Print result"
-        run: |
-          echo "token: ${{ github.token }}"
-          echo "id: ${{ steps.version.outputs.id }}"
-          echo "name: ${{ steps.version.outputs.name }}"
-          echo "tag_name: ${{ steps.version.outputs.tag_name }}"
-          echo "created_at: ${{ steps.version.outputs.created_atd }}"
-          echo "draft: ${{ steps.version.outputs.draft }}"
-          echo "prerelease: ${{ steps.version.outputs.prerelease }}"
+      # - name: Print result
+      #   run: |
+      #     echo "token: ${{ github.token }}"
+      #     echo "id: ${{ steps.version.outputs.id }}"
+      #     echo "name: ${{ steps.version.outputs.name }}"
+      #     echo "tag_name: ${{ steps.version.outputs.tag_name }}"
+      #     echo "created_at: ${{ steps.version.outputs.created_atd }}"
+      #     echo "draft: ${{ steps.version.outputs.draft }}"
+      #     echo "prerelease: ${{ steps.version.outputs.prerelease }}"
+
+      - name: Version Fix
+        id: version_fix
+        uses: ./version-fixing
+        with:
+          version: ${{ steps.version.outputs.tag_name }}
+          type: semantic_version
 
       - name: Bump release version
         id: bump_version
         uses: christian-draeger/increment-semantic-version@1.0.3
         with:
-          current-version: '${{ steps.version.outputs.tag_name }}'
+          current-version: '${{ steps.version_fix.outputs.modified_version }}'
           version-fragment: 'rc'
+      
+      - name: Version Fix
+        id: version_fix_assembly
+        uses: ./version-fixing
+        with:
+          version: ${{ steps.bump_version.outputs.next-version }}
+          type: assembly_version
 
       - name: Create Release
         id: create_release
@@ -44,11 +58,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
-          tag_name: ${{ steps.bump_version.outputs.next-version }}
-          release_name: ${{ steps.bump_version.outputs.next-version }}
-          body: |
-            Changes in this Release
-            - First Change
-            - Second Change
+          tag_name: ${{  steps.version_fix_assembly.outputs.modified_version }}
+          release_name: ${{  steps.version_fix_assembly.outputs.modified_version }}
           draft: false
           prerelease: true
