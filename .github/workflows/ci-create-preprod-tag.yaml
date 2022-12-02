@@ -35,7 +35,7 @@ jobs:
         id: bump_version
         uses: christian-draeger/increment-semantic-version@1.0.3
         with:
-          current-version: '${{ steps.version.outputs.prerelease }}'
+          current-version: '${{ steps.version.outputs.tag_name }}'
           version-fragment: 'rc'
 
       - name: Create Release
