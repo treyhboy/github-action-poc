@@ -1,0 +1,38 @@
+name: create preprod release tag
+on:
+  issue_comment:
+    types: [ created ]
+
+jobs:
+  create-tag:
+    if: contains( ${{ github.event.comment.body }}, 'deploy preprod')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Latest PreProd Release
+        id: version
+        uses: pozetroninc/github-action-get-latest-release@master
+        with:
+          repo: '${{ env.REPO_NAME }}'
+          excludes: release, draft
+
+      - name: Bump release version
+        id: bump_version
+        uses: christian-draeger/increment-semantic-version@1.0.3
+        with:
+          current-version: ${{ steps.version.outputs.release }}
+          version-fragment: 'rc'
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
+        with:
+          tag_name: ${{ steps.bump_version.outputs.next-version }}
+          release_name: ${{ steps.bump_version.outputs.next-version }}
+          body: |
+            Changes in this Release
+            - First Change
+            - Second Change
+          draft: false
+          prerelease: true
