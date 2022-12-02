@@ -16,6 +16,9 @@ jobs:
           myToken: ${{ github.token }}
           exclude_types: "release"
           view_top: 1
+        run:
+         echo "prerelease: ${{ steps.last_release.outputs.prerelease }}"
+         echo "token: ${{ github.token }}"
         # uses: pozetroninc/github-action-get-latest-release@master
         # with:
         #   repo: '$${{ github.repository }}'
@@ -26,7 +29,7 @@ jobs:
         id: bump_version
         uses: christian-draeger/increment-semantic-version@1.0.3
         with:
-          current-version: ${{ steps.last_release.outputs.prerelease }}
+          current-version: '${{ steps.last_release.outputs.prerelease }}'
           version-fragment: 'rc'
 
       - name: Create Release
