@@ -11,16 +11,22 @@ jobs:
     steps:
       - name: Get Latest PreProd Release
         id: version
-        uses: pozetroninc/github-action-get-latest-release@master
+        uses: InsonusK/get-latest-release@v1.0.1
         with:
-          repo: '$${{ github.repository }}'
-          excludes: release, draft
+          myToken: ${{ github.token }}
+          exclude_types: "release"
+          view_top: 1
+        # uses: pozetroninc/github-action-get-latest-release@master
+        # with:
+        #   repo: '$${{ github.repository }}'
+        #   excludes: release, draft
+    
 
       - name: Bump release version
         id: bump_version
         uses: christian-draeger/increment-semantic-version@1.0.3
         with:
-          current-version: ${{ steps.version.outputs.release }}
+          current-version: ${{ steps.last_release.outputs.prerelease }}
           version-fragment: 'rc'
 
       - name: Create Release
