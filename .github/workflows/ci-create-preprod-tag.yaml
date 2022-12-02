@@ -13,7 +13,7 @@ jobs:
         id: version
         uses: pozetroninc/github-action-get-latest-release@master
         with:
-          repo: '${{ env.REPO_NAME }}'
+          repo: '$${{ github.repository }}'
           excludes: release, draft
 
       - name: Bump release version
