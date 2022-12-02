@@ -42,7 +42,7 @@ jobs:
         id: create_release
         uses: actions/create-release@latest
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
         with:
           tag_name: ${{ steps.bump_version.outputs.next-version }}
           release_name: ${{ steps.bump_version.outputs.next-version }}
