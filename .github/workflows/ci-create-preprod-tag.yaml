@@ -50,7 +50,7 @@ jobs:
       
       - name: Version Fix
         id: version_fix_assembly
-        uses: ./version-fixing
+        uses: ./.github/workflows/version-fixing
         with:
           version: ${{ steps.bump_version.outputs.next-version }}
           type: assembly_version
