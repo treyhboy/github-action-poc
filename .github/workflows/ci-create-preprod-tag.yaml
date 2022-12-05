@@ -36,7 +36,7 @@ jobs:
 
       - name: Version Fix
         id: version_fix
-        uses: ./github/workflows/version-fixing
+        uses: ./.github/workflows/version-fixing
         with:
           version: ${{ steps.version.outputs.tag_name }}
           type: semantic_version
