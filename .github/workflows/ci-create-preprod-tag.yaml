@@ -12,11 +12,7 @@ jobs:
         uses: actions/checkout@v3
       
       - name: Check Approved Status
-        uses: snow-actions/unanimously-approved@v2.1.0
-
-      - name: Print Approved Status
-        run: echo "Approved !!"
-        if: ${{ steps.approved.outputs.approved == 'true' }}
+        uses: ./.github/workflows/approved-event
 
       - name: Get Latest PreProd Release
         id: version
