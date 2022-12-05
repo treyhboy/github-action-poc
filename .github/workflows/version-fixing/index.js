@@ -11,13 +11,13 @@ async function run() {
 }
 
 function convertToSemVar(version) {
-    let semvar = version.replace("v.","")
+    let semvar = version.replace("v","")
     semvar = semvar.replace("rc.","rc")
     return semvar
 }
 
 function convertToAssemblyVersions(version) {
-    let assemblyVersion = "v." + version
+    let assemblyVersion = "v" + version
     assemblyVersion = assemblyVersion.replace("rc","rc.")
     return assemblyVersion
 }
