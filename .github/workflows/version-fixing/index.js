@@ -1,4 +1,4 @@
-import * as core from '@actions/core';
+const core = require('@actions/core');
 
 async function run() {
     const version = core.getInput('version');
@@ -20,4 +20,14 @@ function convertToAssemblyVersions(version) {
     let assemblyVersion = "v." + version
     assemblyVersion = assemblyVersion.replace("rc","rc.")
     return assemblyVersion
+}
+
+// @ts-ignore
+if (!module.parent) {
+  try {
+    run()
+  } catch (error) {
+    core.setFailed(error.message)
+    throw error
+  }
 }
