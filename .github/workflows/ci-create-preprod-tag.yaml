@@ -1,38 +1,40 @@
 name: create preprod release tag
 on:
-  issue_comment:
-    types: [ created ]
+  pull_request:
+    types: [ labeled ]
 
 jobs:
   create-tag:
-    if: contains( ${{ github.event.comment.body }}, 'deploy preprod')
+    if: ${{ github.event.label.name == 'deploy preprod' }}
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      
+      - name: Check Approved Status
+        uses: ./.github/workflows/approved-event
+
       - name: Get Latest PreProd Release
         id: version
-        uses: pozetroninc/github-action-get-latest-release@master
+        uses: ./.github/workflows/get-latest-release
         with:
-          repo: '${{ env.REPO_NAME }}'
-          excludes: release, draft
+          myToken: ${{ github.token }}
+          exclude_types: "release"
+          view_top: 1
 
       - name: Bump release version
         id: bump_version
-        uses: christian-draeger/increment-semantic-version@1.0.3
+        uses: ./.github/workflows/increment-semantic-version
         with:
-          current-version: ${{ steps.version.outputs.release }}
-          version-fragment: 'rc'
+          version: '${{ steps.version.outputs.tag_name }}'
 
       - name: Create Release
         id: create_release
         uses: actions/create-release@latest
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
         with:
-          tag_name: ${{ steps.bump_version.outputs.next-version }}
-          release_name: ${{ steps.bump_version.outputs.next-version }}
-          body: |
-            Changes in this Release
-            - First Change
-            - Second Change
+          tag_name: ${{  steps.bump_version.outputs.incremented_version }}
+          release_name: ${{  steps.version_fix_assembly.outputs.incremented_version }}
           draft: false
           prerelease: true
