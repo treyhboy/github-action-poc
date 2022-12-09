@@ -8,7 +8,7 @@ async function run() {
 
 function incrementSemanticVersion(version) {
    const [major, minor, patch,rc] = version.split('.');
-   return major +"."+ minor +"."+ patch +"."+ (number(rc)+1)
+   return major +"."+ minor +"."+ patch +"."+ (Number(rc)+1)
 }
 
 // @ts-ignore
