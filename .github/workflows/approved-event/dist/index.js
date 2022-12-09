@@ -128,7 +128,6 @@ const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
 const approved_1 = __nccwpck_require__(5417);
 function run() {
-    var _a;
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const token = core.getInput('token');
@@ -136,7 +135,7 @@ function run() {
             const statusDescription = core.getInput('status-description');
             core.debug(JSON.stringify(github.context));
             const octokit = github.getOctokit(token);
-            yield octokit.rest.repos.createCommitStatus(Object.assign(Object.assign({}, github.context.repo), { sha: (_a = github.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.head.sha, state: (yield (0, approved_1.approved)(token)) ? 'success' : 'failure', context: statusContext, description: statusDescription, target_url: `${github.context.serverUrl}/${github.context.repo.owner}/${github.context.repo.repo}/actions/runs/${github.context.runId}` }));
+            core.setOutput("approved", (yield (0, approved_1.approved)(token)));
         }
         catch (error) {
             if (error instanceof Error)
