@@ -1,0 +1,20 @@
+name: 'Unanimously Approved'
+description: 'Approved by all reviewers'
+inputs:
+  token:
+    required: false
+    description: GitHub token
+    default: ${{ github.token }}
+  status-context:
+    required: false
+    description: Status context (use this at branch protection rules)
+    default: review passing
+outputs:
+  modified_version:
+    description: 'converted version'
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
+branding:
+  icon: 'check-circle'
+  color: 'green'
