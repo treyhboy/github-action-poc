@@ -7,17 +7,18 @@
 /* module decorator */ module = __nccwpck_require__.nmd(module);
 const core = __nccwpck_require__(7948);
 const github = __nccwpck_require__(3281);
+const { Octokit } = __nccwpck_require__(7850);
 
 
 async function run() {
     const version = await getLatestPreRelease()
-    core.setOutput("incremented_version", incrementSemanticVersion(version));
+    core.setOutput("tag_name", incrementSemanticVersion(version));
 }
 
 async function getLatestPreRelease() {
     try {
         const token = core.getInput('token');
-        const octokit = github.getOctokit(token);
+        const octokit = new Octokit({ auth: token })
         var releases  = await octokit.repos.listReleases({
             repo: github.context.repo.repo,
             owner: github.context.repo.owner,
@@ -9557,6 +9558,14 @@ function wrappy (fn, cb) {
     return ret
   }
 }
+
+
+/***/ }),
+
+/***/ 7850:
+/***/ ((module) => {
+
+module.exports = eval("require")("@octokit/rest");
 
 
 /***/ }),
