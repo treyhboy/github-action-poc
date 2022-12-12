@@ -1,5 +1,6 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
+const { Octokit } = require("@octokit/rest");
 
 
 async function run() {
@@ -10,8 +11,8 @@ async function run() {
 async function getLatestPreRelease() {
     try {
         const token = core.getInput('token');
-        const octokit = github.getOctokit(token)
-        var releases  = await octokit.rest.repos.listReleases({
+        const octokit = new Octokit({ auth: token })
+        var releases  = await octokit.repos.listReleases({
             repo: github.context.repo.repo,
             owner: github.context.repo.owner,
             per_page: 100,
