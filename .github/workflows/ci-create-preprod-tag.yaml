@@ -11,22 +11,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       
-      - name: Check Approved Status
-        uses: ./.github/workflows/approved-event
+      # - name: Check Approved Status
+      #   uses: ./.github/workflows/approved-event
 
       - name: Get Latest PreProd Release
         id: version
-        uses: ./.github/workflows/get-latest-release
+        uses: ./.github/workflows/get-bumped-latest-release
         with:
-          myToken: ${{ github.token }}
-          exclude_types: "release"
-          view_top: 1
+          token: ${{ github.token }}
 
-      - name: Bump release version
-        id: bump_version
-        uses: ./.github/workflows/increment-semantic-version
-        with:
-          version: '${{ steps.version.outputs.tag_name }}'
+      # - name: Bump release version
+      #   id: bump_version
+      #   uses: ./.github/workflows/increment-semantic-version
+      #   with:
+      #     version: '${{ steps.version.outputs.tag_name }}'
 
       - name: Create Release
         id: create_release
