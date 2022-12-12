@@ -1,0 +1,12 @@
+name: "Get Bumped latest PreRelease Version of repository"
+description: "Get Bumped latest PreRelease Version of repository"
+inputs:
+  token:
+    description: "GitHub Token"
+    required: true
+outputs:
+  tag_name:
+    description: 'Tag of the release'
+runs:
+  using: "node12"
+  main: "dist/index.js"
