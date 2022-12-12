@@ -4,13 +4,13 @@ const github = require('@actions/github');
 
 async function run() {
     const version = await getLatestPreRelease()
-    core.setOutput("incremented_version", incrementSemanticVersion(version));
+    core.setOutput("tag_name", incrementSemanticVersion(version));
 }
 
 async function getLatestPreRelease() {
     try {
         const token = core.getInput('token');
-        const octokit = github.getOctokit(token);
+        const octokit = github.getOctokit(token)
         var releases  = await octokit.repos.listReleases({
             repo: github.context.repo.repo,
             owner: github.context.repo.owner,

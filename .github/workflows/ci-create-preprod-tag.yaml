@@ -14,7 +14,7 @@ jobs:
       # - name: Check Approved Status
       #   uses: ./.github/workflows/approved-event
 
-      - name: Get Latest PreProd Release
+      - name: Get Bumped PreProd Release Version
         id: version
         uses: ./.github/workflows/get-bumped-latest-release
         with:
@@ -32,7 +32,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
-          tag_name: ${{  steps.bump_version.outputs.incremented_version }}
-          release_name: ${{  steps.bump_version.outputs.incremented_version }}
+          tag_name: ${{  steps.version.outputs.tag_name }}
+          release_name: ${{  steps.version.outputs.tag_name }}
           draft: false
           prerelease: true
