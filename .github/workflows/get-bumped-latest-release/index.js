@@ -11,7 +11,7 @@ async function getLatestPreRelease() {
     try {
         const token = core.getInput('token');
         const octokit = github.getOctokit(token)
-        var releases  = await octokit.repos.listReleases({
+        var releases  = await octokit.rest.repos.listReleases({
             repo: github.context.repo.repo,
             owner: github.context.repo.owner,
             per_page: 100,
